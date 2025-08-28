@@ -17,33 +17,33 @@ export default function Home() {
   const themes = [
     {
       name: 'Subtle Blue',
-      bg: 'from-blue-100 via-blue-50 to-indigo-100',
+      bg: 'from-blue-200 via-blue-100 to-indigo-200',
       accent: 'blue',
-      elements: ['bg-blue-200', 'bg-indigo-200', 'bg-blue-100'],
+      elements: ['bg-blue-300', 'bg-indigo-300', 'bg-blue-200'],
       preview: 'from-blue-400 to-indigo-500',
       button: { bg: 'bg-orange-500', hover: 'hover:bg-orange-600', ring: 'focus:ring-orange-400' }
     },
     {
       name: 'Purple Dreams',
-      bg: 'from-purple-100 via-pink-50 to-indigo-100',
+      bg: 'from-purple-200 via-pink-100 to-indigo-200',
       accent: 'purple',
-      elements: ['bg-purple-200', 'bg-pink-200', 'bg-indigo-200'],
+      elements: ['bg-purple-300', 'bg-pink-300', 'bg-indigo-300'],
       preview: 'from-purple-400 to-pink-500',
       button: { bg: 'bg-green-500', hover: 'hover:bg-green-600', ring: 'focus:ring-green-400' }
     },
     {
       name: 'Ocean Breeze',
-      bg: 'from-blue-100 via-cyan-50 to-teal-100',
+      bg: 'from-blue-200 via-cyan-100 to-teal-200',
       accent: 'cyan',
-      elements: ['bg-blue-200', 'bg-cyan-200', 'bg-teal-200'],
+      elements: ['bg-blue-300', 'bg-cyan-300', 'bg-teal-300'],
       preview: 'from-blue-400 to-teal-500',
       button: { bg: 'bg-rose-500', hover: 'hover:bg-rose-600', ring: 'focus:ring-rose-400' }
     },
     {
       name: 'Sunset Glow',
-      bg: 'from-orange-100 via-rose-50 to-pink-100',
+      bg: 'from-orange-200 via-rose-100 to-pink-200',
       accent: 'rose',
-      elements: ['bg-orange-200', 'bg-rose-200', 'bg-pink-200'],
+      elements: ['bg-orange-300', 'bg-rose-300', 'bg-pink-300'],
       preview: 'from-orange-400 to-pink-500',
       button: { bg: 'bg-teal-500', hover: 'hover:bg-teal-600', ring: 'focus:ring-teal-400' }
     }
@@ -176,8 +176,8 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div className="mt-8 text-center z-10">
-        <div className="backdrop-blur-sm bg-white/20 border border-white/30 rounded-xl px-4 py-2 shadow-lg">
+      <div className="mt-16 text-center z-10">
+        <div className="backdrop-blur-sm bg-white/20 border border-white/30 rounded-xl px-4 py-2 shadow-lg float-animation hover:shadow-xl transition-all duration-300">
           <p className="text-gray-800 text-sm font-medium drop-shadow-sm">
             Created with 💙 by khush2808
           </p>
