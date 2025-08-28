@@ -21,7 +21,7 @@ export default function Home() {
       accent: 'blue',
       elements: ['bg-blue-300', 'bg-indigo-300', 'bg-blue-200'],
       preview: 'from-blue-400 to-indigo-500',
-      button: { bg: 'bg-orange-500', hover: 'hover:bg-orange-600', ring: 'focus:ring-orange-400' }
+      button: { bg: 'bg-amber-500', hover: 'hover:bg-amber-600', ring: 'focus:ring-amber-400' }
     },
     {
       name: 'Purple Dreams',
