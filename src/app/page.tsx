@@ -16,6 +16,14 @@ export default function Home() {
   
   const themes = [
     {
+      name: 'Ocean Breeze',
+      bg: 'from-blue-200 via-cyan-100 to-teal-200',
+      accent: 'cyan',
+      elements: ['bg-blue-300', 'bg-cyan-300', 'bg-teal-300'],
+      preview: 'from-blue-400 to-teal-500',
+      button: { bg: 'bg-rose-500', hover: 'hover:bg-rose-600', ring: 'focus:ring-rose-400' }
+    },
+    {
       name: 'Subtle Blue',
       bg: 'from-blue-200 via-blue-100 to-indigo-200',
       accent: 'blue',
@@ -30,14 +38,6 @@ export default function Home() {
       elements: ['bg-purple-300', 'bg-pink-300', 'bg-indigo-300'],
       preview: 'from-purple-400 to-pink-500',
       button: { bg: 'bg-green-500', hover: 'hover:bg-green-600', ring: 'focus:ring-green-400' }
-    },
-    {
-      name: 'Ocean Breeze',
-      bg: 'from-blue-200 via-cyan-100 to-teal-200',
-      accent: 'cyan',
-      elements: ['bg-blue-300', 'bg-cyan-300', 'bg-teal-300'],
-      preview: 'from-blue-400 to-teal-500',
-      button: { bg: 'bg-rose-500', hover: 'hover:bg-rose-600', ring: 'focus:ring-rose-400' }
     },
     {
       name: 'Sunset Glow',
