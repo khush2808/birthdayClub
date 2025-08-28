@@ -154,7 +154,7 @@ export default function Home() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-gradient-to-r from-${currentThemeData.accent}-500 to-${currentThemeData.accent}-600 text-black py-3 px-6 rounded-xl hover:from-${currentThemeData.accent}-600 hover:to-${currentThemeData.accent}-700 focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl font-medium cursor-pointer`}
+            className={`w-full bg-${currentThemeData.accent}-500 text-black py-3 px-6 rounded-xl border-2 border-${currentThemeData.accent}-600 hover:bg-${currentThemeData.accent}-600 hover:border-${currentThemeData.accent}-700 focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl font-bold cursor-pointer backdrop-blur-sm`}
           >
             {isSubmitting ? 'Registering...' : 'Join Birthday Club'}
           </button>
