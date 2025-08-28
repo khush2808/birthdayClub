@@ -176,7 +176,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div className="mt-8 text-center z-10">
+      <div className="mt-4 text-center z-10">
         <div className="backdrop-blur-sm bg-white/20 border border-white/30 rounded-xl px-4 py-2 shadow-lg float-animation hover:shadow-xl transition-all duration-300">
           <p className="text-gray-800 text-sm font-medium drop-shadow-sm">
             Created with 💙 by khush2808
