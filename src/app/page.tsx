@@ -160,7 +160,7 @@ export default function Home() {
             disabled={isSubmitting}
             className={`w-full ${currentThemeData.button.bg} text-white py-3 px-6 rounded-xl ${currentThemeData.button.hover} focus:outline-none focus:ring-2 ${currentThemeData.button.ring} focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl font-bold cursor-pointer backdrop-blur-sm`}
           >
-            {isSubmitting ? 'Registering...' : 'Join Birthday Club'}
+            {isSubmitting ? 'Joining 🎉' : 'Join Birthday Club '}
           </button>
         </form>
 
