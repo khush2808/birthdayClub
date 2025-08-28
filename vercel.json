@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/send-birthday-emails",
+      "schedule": "30 3 * * *"
+    }
+  ]
+}
