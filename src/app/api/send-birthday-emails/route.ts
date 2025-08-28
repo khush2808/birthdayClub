@@ -5,6 +5,7 @@ import { sendBirthdayEmails } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
+    // Connect to database with retry logic
     await dbConnect();
 
     const today = new Date();
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     const allUsers = await User.find({}, 'name email');
-    
+
     if (allUsers.length < 2) {
       return NextResponse.json(
         { message: 'Not enough users to send birthday notifications' },
@@ -63,6 +64,19 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Birthday email sending error:', error);
+
+    // Handle specific database errors
+    if (error instanceof Error) {
+      if (error.message.includes('authentication failed') ||
+        error.message.includes('bad auth') ||
+        error.message.includes('MongoServerError')) {
+        return NextResponse.json(
+          { error: 'Database connection failed. Please try again later.' },
+          { status: 503 }
+        );
+      }
+    }
+
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -72,6 +86,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
+    // Connect to database with retry logic
     await dbConnect();
 
     const today = new Date();
@@ -98,6 +113,19 @@ export async function GET() {
 
   } catch (error) {
     console.error('Error checking birthdays:', error);
+
+    // Handle specific database errors
+    if (error instanceof Error) {
+      if (error.message.includes('authentication failed') ||
+        error.message.includes('bad auth') ||
+        error.message.includes('MongoServerError')) {
+        return NextResponse.json(
+          { error: 'Database connection failed. Please try again later.' },
+          { status: 503 }
+        );
+      }
+    }
+
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

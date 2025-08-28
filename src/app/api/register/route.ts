@@ -4,8 +4,9 @@ import User from '@/models/User';
 
 export async function POST(request: NextRequest) {
   try {
+    // Connect to database with retry logic
     await dbConnect();
-    
+
     const body = await request.json();
     const { name, email, dateOfBirth } = body;
 
@@ -39,6 +40,19 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Registration error:', error);
+
+    // Handle specific database errors
+    if (error instanceof Error) {
+      if (error.message.includes('authentication failed') ||
+        error.message.includes('bad auth') ||
+        error.message.includes('MongoServerError')) {
+        return NextResponse.json(
+          { error: 'Database connection failed. Please try again later.' },
+          { status: 503 }
+        );
+      }
+    }
+
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
