@@ -17,10 +17,10 @@ export default function Home() {
   const themes = [
     {
       name: 'Subtle Blue',
-      bg: 'from-gray-50 via-white to-blue-50',
+      bg: 'from-blue-100 via-blue-50 to-indigo-100',
       accent: 'blue',
-      elements: ['bg-blue-100', 'bg-slate-100', 'bg-blue-50'],
-      preview: 'from-blue-200 to-blue-400'
+      elements: ['bg-blue-200', 'bg-indigo-200', 'bg-blue-100'],
+      preview: 'from-blue-400 to-indigo-500'
     },
     {
       name: 'Purple Dreams',
@@ -93,7 +93,7 @@ export default function Home() {
       </div>
 
       {/* Glassmorphism form container */}
-      <div className="relative backdrop-blur-lg bg-white/20 border border-white/30 rounded-2xl shadow-xl p-8 w-full max-w-md z-10">
+      <div className="relative backdrop-blur-xl bg-white/25 border border-white/40 rounded-2xl shadow-2xl p-8 w-full max-w-md z-10">
         <div className="text-center mb-8">
           <Gift className={`mx-auto h-12 w-12 text-${currentThemeData.accent}-600 mb-4 drop-shadow-sm transition-all duration-500`} />
           <h1 className="text-3xl font-bold text-gray-800 mb-2 drop-shadow-sm">Birthday Club</h1>
@@ -173,9 +173,11 @@ export default function Home() {
 
       {/* Footer */}
       <div className="mt-8 text-center z-10">
-        <p className="text-gray-700 text-sm font-medium drop-shadow-sm">
-          Created with 💙 by khush2808
-        </p>
+        <div className="backdrop-blur-sm bg-white/20 border border-white/30 rounded-xl px-4 py-2 shadow-lg">
+          <p className="text-gray-800 text-sm font-medium drop-shadow-sm">
+            Created with 💙 by khush2808
+          </p>
+        </div>
       </div>
 
       {/* Color Theme Picker */}
