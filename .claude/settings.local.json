@@ -6,7 +6,8 @@
       "Bash(git push:*)",
       "Bash(vercel:*)",
       "Bash(npm run build:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
