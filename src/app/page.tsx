@@ -95,7 +95,7 @@ export default function Home() {
       {/* Glassmorphism form container */}
       <div className="relative backdrop-blur-xl bg-white/25 border border-white/40 rounded-2xl shadow-2xl p-8 w-full max-w-md z-10">
         <div className="text-center mb-8">
-          <Gift className={`mx-auto h-12 w-12 text-${currentThemeData.accent}-600 mb-4 drop-shadow-sm transition-all duration-500`} />
+          <Gift className="mx-auto h-12 w-12 text-gray-800 mb-4 drop-shadow-sm transition-all duration-500" />
           <h1 className="text-3xl font-bold text-gray-800 mb-2 drop-shadow-sm">Birthday Club</h1>
           <p className="text-gray-700">Join our birthday reminder community!</p>
         </div>
@@ -154,7 +154,7 @@ export default function Home() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-gradient-to-r from-${currentThemeData.accent}-500 to-${currentThemeData.accent}-600 text-white py-3 px-6 rounded-xl hover:from-${currentThemeData.accent}-600 hover:to-${currentThemeData.accent}-700 focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl font-medium cursor-pointer`}
+            className={`w-full bg-gradient-to-r from-${currentThemeData.accent}-500 to-${currentThemeData.accent}-600 text-black py-3 px-6 rounded-xl hover:from-${currentThemeData.accent}-600 hover:to-${currentThemeData.accent}-700 focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl font-medium cursor-pointer`}
           >
             {isSubmitting ? 'Registering...' : 'Join Birthday Club'}
           </button>
