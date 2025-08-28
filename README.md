@@ -27,11 +27,16 @@ GMAIL_APP_PASSWORD=your-16-character-app-password
 
 ### 3. Deployment on Vercel
 
-#### Option A: Vercel Cron (Pro Plan Required)
-The `vercel.json` file is configured to run birthday checks daily at 9 AM UTC.
+#### Automated Birthday Emails with GitHub Actions
+The app uses GitHub Actions for free automated daily birthday checks at 9:00 AM IST.
 
-#### Option B: Free External Triggers
-Use these free services to trigger `/api/send-birthday-emails` daily:
+**Setup:**
+1. Deploy to Vercel
+2. Add `VERCEL_APP_URL` secret to your GitHub repository settings
+3. GitHub Actions will automatically trigger daily birthday emails
+
+#### Alternative External Triggers
+You can also use these free services to trigger `/api/send-birthday-emails` daily:
 
 **EasyCron.com:**
 - Sign up for free account

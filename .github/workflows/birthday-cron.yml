@@ -1,0 +1,37 @@
+name: Daily Birthday Check
+
+on:
+  schedule:
+    # Runs at 3:30 AM UTC = 9:00 AM IST daily
+    - cron: '30 3 * * *'
+  workflow_dispatch: # Allows manual triggering for testing
+
+jobs:
+  send-birthday-emails:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Send Birthday Email Notifications
+        run: |
+          echo "Triggering birthday email check..."
+          
+          response=$(curl -s -w "%{http_code}" -X POST \
+            ${{ secrets.VERCEL_APP_URL }}/api/send-birthday-emails \
+            -H "Content-Type: application/json")
+          
+          http_code="${response: -3}"
+          body="${response%???}"
+          
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+          
+          if [ "$http_code" -ne 200 ]; then
+            echo "::error::Birthday email trigger failed with status $http_code"
+            exit 1
+          else
+            echo "::notice::Birthday emails processed successfully"
+          fi
+
+      - name: Log completion
+        run: |
+          echo "Birthday email cron job completed at $(date)"
