@@ -20,28 +20,32 @@ export default function Home() {
       bg: 'from-blue-100 via-blue-50 to-indigo-100',
       accent: 'blue',
       elements: ['bg-blue-200', 'bg-indigo-200', 'bg-blue-100'],
-      preview: 'from-blue-400 to-indigo-500'
+      preview: 'from-blue-400 to-indigo-500',
+      button: { bg: 'bg-orange-500', hover: 'hover:bg-orange-600', ring: 'focus:ring-orange-400' }
     },
     {
       name: 'Purple Dreams',
       bg: 'from-purple-100 via-pink-50 to-indigo-100',
       accent: 'purple',
       elements: ['bg-purple-200', 'bg-pink-200', 'bg-indigo-200'],
-      preview: 'from-purple-400 to-pink-500'
+      preview: 'from-purple-400 to-pink-500',
+      button: { bg: 'bg-green-500', hover: 'hover:bg-green-600', ring: 'focus:ring-green-400' }
     },
     {
       name: 'Ocean Breeze',
       bg: 'from-blue-100 via-cyan-50 to-teal-100',
       accent: 'cyan',
       elements: ['bg-blue-200', 'bg-cyan-200', 'bg-teal-200'],
-      preview: 'from-blue-400 to-teal-500'
+      preview: 'from-blue-400 to-teal-500',
+      button: { bg: 'bg-rose-500', hover: 'hover:bg-rose-600', ring: 'focus:ring-rose-400' }
     },
     {
       name: 'Sunset Glow',
       bg: 'from-orange-100 via-rose-50 to-pink-100',
       accent: 'rose',
       elements: ['bg-orange-200', 'bg-rose-200', 'bg-pink-200'],
-      preview: 'from-orange-400 to-pink-500'
+      preview: 'from-orange-400 to-pink-500',
+      button: { bg: 'bg-teal-500', hover: 'hover:bg-teal-600', ring: 'focus:ring-teal-400' }
     }
   ];
   
@@ -154,7 +158,7 @@ export default function Home() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-${currentThemeData.accent}-500 text-black py-3 px-6 rounded-xl hover:bg-${currentThemeData.accent}-600 focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl font-bold cursor-pointer backdrop-blur-sm`}
+            className={`w-full ${currentThemeData.button.bg} text-white py-3 px-6 rounded-xl ${currentThemeData.button.hover} focus:outline-none focus:ring-2 ${currentThemeData.button.ring} focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl font-bold cursor-pointer backdrop-blur-sm`}
           >
             {isSubmitting ? 'Registering...' : 'Join Birthday Club'}
           </button>
