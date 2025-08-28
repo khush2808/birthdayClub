@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
         return { success: true, user: birthdayUser.name };
       } catch (error) {
         console.error(`Failed to send birthday emails for ${birthdayUser.name}:`, error);
-        return { success: false, user: birthdayUser.name, error: error.message };
+        return { success: false, user: birthdayUser.name, error: error instanceof Error ? error.message : 'Unknown error' };
       }
     });
 
