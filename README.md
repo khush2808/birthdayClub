@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Birthday Club App 🎂
 
-## Getting Started
+A simple birthday reminder app that sends email notifications to all registered users when someone has a birthday.
 
-First, run the development server:
+## Features
+- User registration with name, email, and date of birth
+- Beautiful UI with Tailwind CSS and Lucide icons
+- MongoDB storage with Mongoose
+- Gmail integration for email notifications
+- Automated daily birthday checks
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Setup
+
+### 1. Environment Variables
+Create `.env.local` with:
+```
+MONGODB_URI=your_mongodb_connection_string
+GMAIL_EMAIL=your-email@gmail.com
+GMAIL_APP_PASSWORD=your-16-character-app-password
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Gmail App Password Setup
+1. Enable 2-Factor Authentication on your Gmail account
+2. Go to Google Account → Security → 2-Step Verification → App passwords
+3. Generate a new app password for "Mail"
+4. Use the 16-character password in your environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Deployment on Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Option A: Vercel Cron (Pro Plan Required)
+The `vercel.json` file is configured to run birthday checks daily at 9 AM UTC.
 
-## Learn More
+#### Option B: Free External Triggers
+Use these free services to trigger `/api/send-birthday-emails` daily:
 
-To learn more about Next.js, take a look at the following resources:
+**EasyCron.com:**
+- Sign up for free account
+- Create new cron job
+- URL: `https://your-app.vercel.app/api/send-birthday-emails`
+- Schedule: `0 9 * * *` (9 AM daily)
+- Method: POST
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**cron-job.org:**
+- Free account allows 50 executions/month
+- URL: `https://your-app.vercel.app/api/send-birthday-emails`
+- Schedule: Daily at 9:00 AM
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**GitHub Actions (if you use GitHub):**
+Create `.github/workflows/birthday-cron.yml`:
+```yaml
+name: Daily Birthday Check
+on:
+  schedule:
+    - cron: '0 9 * * *'
+jobs:
+  birthday-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger birthday emails
+        run: |
+          curl -X POST https://your-app.vercel.app/api/send-birthday-emails
+```
 
-## Deploy on Vercel
+## API Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### POST /api/register
+Register a new user
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "dateOfBirth": "1990-05-15"
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### GET /api/send-birthday-emails
+Check today's birthdays (returns list without sending emails)
+
+### POST /api/send-birthday-emails
+Trigger birthday email notifications for today's birthdays
+
+## Manual Testing
+You can manually trigger birthday emails by visiting:
+`https://your-app.vercel.app/api/send-birthday-emails` (POST request)
+
+## Development
+```bash
+npm install
+npm run dev
+```
+
+App will be available at `http://localhost:3000`
