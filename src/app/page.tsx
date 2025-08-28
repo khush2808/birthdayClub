@@ -49,17 +49,25 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-200 via-green-200 to-green-300 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse delay-1000"></div>
+        <div className="absolute top-40 left-1/2 w-60 h-60 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse delay-500"></div>
+      </div>
+
+      {/* Glassmorphism form container */}
+      <div className="relative backdrop-blur-lg bg-white/20 border border-white/30 rounded-2xl shadow-xl p-8 w-full max-w-md z-10">
         <div className="text-center mb-8">
-          <Gift className="mx-auto h-12 w-12 text-indigo-600 mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Birthday Club</h1>
-          <p className="text-gray-600">Join our birthday reminder community!</p>
+          <Gift className="mx-auto h-12 w-12 text-green-700 mb-4 drop-shadow-sm" />
+          <h1 className="text-3xl font-bold text-gray-800 mb-2 drop-shadow-sm">Birthday Club</h1>
+          <p className="text-gray-700">Join our birthday reminder community!</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-800 mb-2">
               <User className="inline h-4 w-4 mr-1" />
               Full Name
             </label>
@@ -70,13 +78,13 @@ export default function Home() {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-500 text-gray-900 font-medium"
               placeholder="Enter your full name"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-2">
               <Mail className="inline h-4 w-4 mr-1" />
               Email Address
             </label>
@@ -87,13 +95,13 @@ export default function Home() {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="Enter your email"
+              className="w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent placeholder-gray-500 text-gray-900 font-medium"
+              placeholder="Enter your email address"
             />
           </div>
 
           <div>
-            <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-800 mb-2">
               <Calendar className="inline h-4 w-4 mr-1" />
               Date of Birth
             </label>
@@ -104,28 +112,35 @@ export default function Home() {
               required
               value={formData.dateOfBirth}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 font-medium [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-6 rounded-xl hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl font-medium"
           >
             {isSubmitting ? 'Registering...' : 'Join Birthday Club'}
           </button>
         </form>
 
         {message && (
-          <div className={`mt-4 p-3 rounded-md text-sm ${
+          <div className={`mt-6 p-4 rounded-xl text-sm backdrop-blur-sm border ${
             message.includes('successful') 
-              ? 'bg-green-50 text-green-800 border border-green-200' 
-              : 'bg-red-50 text-red-800 border border-red-200'
+              ? 'bg-green-100/50 text-green-800 border-green-300/50' 
+              : 'bg-red-100/50 text-red-800 border-red-300/50'
           }`}>
             {message}
           </div>
         )}
+      </div>
+
+      {/* Footer */}
+      <div className="mt-8 text-center z-10">
+        <p className="text-gray-700 text-sm font-medium drop-shadow-sm">
+          Created with 💙 by khush2808
+        </p>
       </div>
     </div>
   );
