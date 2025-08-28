@@ -176,10 +176,18 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div className="mt-4 text-center z-10">
+      <div className="mt-7 text-center z-10">
         <div className="backdrop-blur-sm bg-white/20 border border-white/30 rounded-xl px-4 py-2 shadow-lg float-animation hover:shadow-xl transition-all duration-300">
           <p className="text-gray-800 text-sm font-medium drop-shadow-sm">
-            Created with 💙 by khush2808
+            Created with 💙 by{' '}
+            <a 
+              href="https://github.com/khush2808" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 transition-colors duration-200 hover:underline"
+            >
+              khush2808
+            </a>
           </p>
         </div>
       </div>
