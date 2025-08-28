@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
 
 declare global {
-  var mongoose: any; // This must be a `var` and not a `let / const`
+  var mongoose: {
+    conn: any;
+    promise: Promise<any> | null;
+  };
 }
 
 const MONGODB_URI = process.env.MONGODB_URI!;
@@ -10,11 +13,11 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+if (!global.mongoose) {
+  global.mongoose = { conn: null, promise: null };
 }
+
+const cached = global.mongoose;
 
 async function dbConnect() {
   if (cached.conn) {
@@ -23,13 +26,9 @@ async function dbConnect() {
 
   if (!cached.promise) {
     const opts = {
-      maxPoolSize: 10, // Maintain up to 10 socket connections
+      maxPoolSize: 5, // Reduced for serverless environments
       serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-      family: 4, // Use IPv4, skip trying IPv6
-      maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
-      bufferCommands: false, // Disable mongoose buffering
-      bufferMaxEntries: 0, // Disable mongoose buffering
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
