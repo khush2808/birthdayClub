@@ -11,6 +11,7 @@ Birthday Club is a modern web application built to help communities stay connect
 - **Responsive Design**: Modern UI with backdrop blur effects and animations
 - **Automated Scheduling**: GitHub Actions cron job for daily birthday checks
 - **Custom Favicon**: SVG birthday cake icon
+- **Analytics Integration**: Vercel Analytics and Speed Insights for monitoring usage and performance
 
 ## 🎨 Current Themes
 1. **Ocean Breeze** (Default) - Blue/Cyan gradients with rose buttons
