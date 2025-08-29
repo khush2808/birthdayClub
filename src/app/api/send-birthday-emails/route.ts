@@ -4,10 +4,21 @@ import User from '@/models/User';
 import RateLimiter from '@/models/RateLimiter';
 import { sendBirthdayEmails } from '@/lib/email';
 
-export async function POST(_request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     // Connect to database with retry logic
     await dbConnect();
+
+    // Optional API key authentication (if API_SECRET_KEY is set)
+    if (process.env.API_SECRET_KEY) {
+      const apiKey = request.headers.get('x-api-key');
+      if (!apiKey || apiKey !== process.env.API_SECRET_KEY) {
+        return NextResponse.json(
+          { error: 'Unauthorized. Valid API key required.' },
+          { status: 401 }
+        );
+      }
+    }
 
     // Rate limiting check
     const endpoint = 'send-birthday-emails';
