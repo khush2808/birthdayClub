@@ -14,8 +14,9 @@ jobs:
       - name: Send Birthday Email Notifications
         run: |
           echo "Triggering birthday email check..."
+          echo "Target URL: ${{ secrets.VERCEL_APP_URL }}/api/send-birthday-emails"
           
-          response=$(curl -s -w "%{http_code}" -X POST \
+          response=$(curl -s -L -w "%{http_code}" -X POST \
             ${{ secrets.VERCEL_APP_URL }}/api/send-birthday-emails \
             -H "Content-Type: application/json")
           
@@ -27,6 +28,7 @@ jobs:
           
           if [ "$http_code" -ne 200 ]; then
             echo "::error::Birthday email trigger failed with status $http_code"
+            echo "::error::Response body: $body"
             exit 1
           else
             echo "::notice::Birthday emails processed successfully"
