@@ -8,6 +8,8 @@ A simple birthday reminder app that sends email notifications to all registered 
 - MongoDB storage with Mongoose
 - Gmail integration for email notifications
 - Automated daily birthday checks
+- Vercel Analytics integration for page views and user insights
+- Speed Insights for Web Vitals monitoring
 
 ## Setup
 
