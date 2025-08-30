@@ -1,16 +1,19 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.GMAIL_EMAIL,
     pass: process.env.GMAIL_APP_PASSWORD,
   },
 });
 
-export async function sendBirthdayEmails(birthdayPerson: { name: string; email: string }, allUsers: Array<{ name: string; email: string }>) {
+export async function sendBirthdayEmails(
+  birthdayPerson: { name: string; email: string },
+  allUsers: Array<{ name: string; email: string }>,
+) {
   const emailPromises = allUsers
-    .filter(user => user.email !== birthdayPerson.email)
+    .filter((user) => user.email !== birthdayPerson.email)
     .map(async (user) => {
       const mailOptions = {
         from: process.env.GMAIL_EMAIL,
@@ -57,7 +60,9 @@ export async function sendBirthdayEmails(birthdayPerson: { name: string; email: 
 
       try {
         await transporter.sendMail(mailOptions);
-        console.log(`Birthday email sent to ${user.email} about ${birthdayPerson.name}`);
+        console.log(
+          `Birthday email sent to ${user.email} about ${birthdayPerson.name}`,
+        );
       } catch (error) {
         console.error(`Failed to send email to ${user.email}:`, error);
         throw error;
@@ -72,7 +77,7 @@ export async function testEmailConnection() {
     await transporter.verify();
     return true;
   } catch (error) {
-    console.error('Email connection test failed:', error);
+    console.error("Email connection test failed:", error);
     return false;
   }
 }
