@@ -1,4 +1,4 @@
-import { type NextRequest,type NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import RateLimiter from '@/models/RateLimiter';
