@@ -7,8 +7,6 @@ A simple birthday reminder app that sends email notifications to all registered 
 - Beautiful UI with Tailwind CSS and Lucide icons
 - MongoDB storage with Mongoose
 - Gmail integration for email notifications
-- **Rate limiting to prevent spam (2 calls per day)**
-- **Optional API key authentication for email endpoint**
 - Automated daily birthday checks
 - Vercel Analytics integration for page views and user insights
 - Speed Insights for Web Vitals monitoring
@@ -21,9 +19,6 @@ Create `.env.local` with:
 MONGODB_URI=your_mongodb_connection_string
 GMAIL_EMAIL=your-email@gmail.com
 GMAIL_APP_PASSWORD=your-16-character-app-password
-
-# Optional: Add API key for additional security
-API_SECRET_KEY=your-secret-api-key-for-birthday-emails-endpoint
 ```
 
 ### 2. Gmail App Password Setup
@@ -91,20 +86,6 @@ Check today's birthdays (returns list without sending emails)
 ### POST /api/send-birthday-emails
 Trigger birthday email notifications for today's birthdays
 
-**Rate Limiting:** This endpoint is limited to 2 calls per day to prevent spam.
-
-**Optional Authentication:** If `API_SECRET_KEY` environment variable is set, requests must include:
-```
-Headers: {
-  "x-api-key": "your-secret-api-key"
-}
-```
-
-**Responses:**
-- `200`: Emails sent successfully
-- `429`: Rate limit exceeded (too many calls in 24 hours)
-- `401`: Invalid or missing API key (if authentication is enabled)
-
 ## Manual Testing
 You can manually trigger birthday emails by visiting:
 `https://your-app.vercel.app/api/send-birthday-emails` (POST request)
@@ -116,13 +97,3 @@ npm run dev
 ```
 
 App will be available at `http://localhost:3000`
-
-## Security
-
-This app includes several security features:
-- **Rate limiting** on email sending API (2 calls per day)
-- **Optional API key authentication** for sensitive endpoints
-- **Input validation** and error handling
-- **Secure database connections**
-
-For a complete security analysis and recommendations, see [SECURITY.md](./SECURITY.md).
