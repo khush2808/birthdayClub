@@ -3,7 +3,7 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import { sendBirthdayEmails } from '@/lib/email';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Connect to database with retry logic
     await dbConnect();
@@ -39,26 +39,43 @@ export async function POST(request: NextRequest) {
 
     const emailPromises = birthdayUsers.map(async (birthdayUser) => {
       try {
-        await sendBirthdayEmails(
+        const emailResult = await sendBirthdayEmails(
           { name: birthdayUser.name, email: birthdayUser.email },
           allUsers.map(u => ({ name: u.name, email: u.email }))
         );
-        return { success: true, user: birthdayUser.name };
+        return { 
+          success: true, 
+          user: birthdayUser.name,
+          emailsSent: emailResult.successfulEmails,
+          emailsFailed: emailResult.failedEmails,
+          totalEmails: emailResult.totalEmails
+        };
       } catch (error) {
         console.error(`Failed to send birthday emails for ${birthdayUser.name}:`, error);
-        return { success: false, user: birthdayUser.name, error: error instanceof Error ? error.message : 'Unknown error' };
+        return { 
+          success: false, 
+          user: birthdayUser.name, 
+          error: error instanceof Error ? error.message : 'Unknown error',
+          emailsSent: 0,
+          emailsFailed: 0,
+          totalEmails: 0
+        };
       }
     });
 
     const results = await Promise.all(emailPromises);
     const successCount = results.filter(r => r.success).length;
     const failedCount = results.filter(r => !r.success).length;
+    const totalEmailsSent = results.reduce((sum, r) => sum + r.emailsSent, 0);
+    const totalEmailsFailed = results.reduce((sum, r) => sum + r.emailsFailed, 0);
 
     return NextResponse.json({
       message: `Birthday emails processed`,
       totalBirthdays: birthdayUsers.length,
-      successfulEmails: successCount,
-      failedEmails: failedCount,
+      successfulBirthdayProcessing: successCount,
+      failedBirthdayProcessing: failedCount,
+      totalEmailsSent,
+      totalEmailsFailed,
       results,
     });
 
