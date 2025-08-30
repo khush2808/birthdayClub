@@ -1,12 +1,64 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
+import RateLimiter from '@/models/RateLimiter';
 import { sendBirthdayEmails } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
     // Connect to database with retry logic
     await dbConnect();
+
+    // Optional API key authentication (if API_SECRET_KEY is set)
+    if (process.env.API_SECRET_KEY) {
+      const apiKey = request.headers.get('x-api-key');
+      if (!apiKey || apiKey !== process.env.API_SECRET_KEY) {
+        return NextResponse.json(
+          { error: 'Unauthorized. Valid API key required.' },
+          { status: 401 }
+        );
+      }
+    }
+
+    // Rate limiting check
+    const endpoint = 'send-birthday-emails';
+    const now = new Date();
+    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+    let rateLimiter = await RateLimiter.findOne({ endpoint });
+
+    if (rateLimiter) {
+      // Check if the last update was more than 24 hours ago
+      if (rateLimiter.lastUpdated < twentyFourHoursAgo) {
+        // Reset counter as it's been more than 24 hours
+        rateLimiter.counter = 1;
+        rateLimiter.lastUpdated = now;
+        await rateLimiter.save();
+      } else {
+        // Check if we've exceeded the daily limit
+        if (rateLimiter.counter >= 2) {
+          return NextResponse.json(
+            { 
+              error: 'Rate limit exceeded. The send birthday emails API can only be called 2 times per day.',
+              resetTime: new Date(rateLimiter.lastUpdated.getTime() + 24 * 60 * 60 * 1000).toISOString()
+            },
+            { status: 429 }
+          );
+        }
+        // Increment counter
+        rateLimiter.counter += 1;
+        rateLimiter.lastUpdated = now;
+        await rateLimiter.save();
+      }
+    } else {
+      // Create new rate limiter record
+      rateLimiter = new RateLimiter({
+        endpoint,
+        counter: 1,
+        lastUpdated: now,
+      });
+      await rateLimiter.save();
+    }
 
     const today = new Date();
     const todayMonth = today.getMonth() + 1;
