@@ -9,7 +9,7 @@ import {
 } from "@/lib/security";
 
 export async function POST(request: NextRequest) {
-  const ip = request.ip || request.headers.get("x-forwarded-for") || "unknown";
+  const ip = request.headers.get("x-forwarded-for") || "unknown";
 
   try {
     // Validate API key for email sending (sensitive operation)
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
 
 // Secure GET endpoint - only returns aggregated data, no personal information
 export async function GET(request: NextRequest) {
-  const ip = request.ip || request.headers.get("x-forwarded-for") || "unknown";
+  const ip = request.headers.get("x-forwarded-for") || "unknown";
 
   try {
     // Validate API key for debugging access

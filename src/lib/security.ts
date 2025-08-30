@@ -9,7 +9,7 @@ export function rateLimit(
   maxRequests = 5,
   windowMs = 15 * 60 * 1000,
 ) {
-  const ip = request.ip || request.headers.get("x-forwarded-for") || "unknown";
+  const ip = request.headers.get("x-forwarded-for") || "unknown";
   const now = Date.now();
 
   // Clean up old entries
@@ -79,7 +79,7 @@ export function validateHoneypot(body: Record<string, unknown>): boolean {
   const honeypotFields = ["website", "url", "phone", "fax"];
 
   for (const field of honeypotFields) {
-    if (body[field] && body[field].trim() !== "") {
+    if (body[field] && typeof body[field] === 'string' && body[field].trim() !== "") {
       return false; // Bot detected
     }
   }

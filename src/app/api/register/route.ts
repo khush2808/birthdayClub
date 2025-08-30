@@ -11,7 +11,7 @@ import {
 import { ZodError } from "zod";
 
 export async function POST(request: NextRequest) {
-  const ip = request.ip || request.headers.get("x-forwarded-for") || "unknown";
+  const ip = request.headers.get("x-forwarded-for") || "unknown";
 
   try {
     // Apply rate limiting
@@ -104,13 +104,13 @@ export async function POST(request: NextRequest) {
     if (error instanceof ZodError) {
       logSecurityEvent("registration", ip, {
         reason: "validation_error",
-        errors: error.errors,
+        errors: error.issues,
       });
 
       const response = NextResponse.json(
         {
           error: "Invalid input data",
-          details: error.errors.map((err) => ({
+          details: error.issues.map((err: any) => ({
             field: err.path.join("."),
             message: err.message,
           })),
