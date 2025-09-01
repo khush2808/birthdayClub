@@ -24,13 +24,14 @@ jobs:
           TARGET_URL="${{ secrets.VERCEL_APP_URL }}/api/send-birthday-emails"
           echo "Target URL: $TARGET_URL"
           
-          # Make the request with detailed curl options
-          response=$(curl -s -L -w "%{http_code}" -X POST \
-            "$TARGET_URL" \
-            -H "Content-Type: application/json" \
-            -H "User-Agent: GitHub-Actions-Birthday-Cron/1.0" \
-            --max-time 30 \
-            --connect-timeout 10)
+           # Make the request with detailed curl options
+           response=$(curl -s -L -w "%{http_code}" -X POST \
+             "$TARGET_URL" \
+             -H "Content-Type: application/json" \
+             -H "x-api-key: ${{ secrets.API_KEY }}" \
+             -H "User-Agent: GitHub-Actions-Birthday-Cron/1.0" \
+             --max-time 30 \
+             --connect-timeout 10)
           
           http_code="${response: -3}"
           body="${response%???}"
