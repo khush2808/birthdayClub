@@ -232,7 +232,7 @@ export default function Home() {
       </div>
 
       {/* Color Theme Picker */}
-      <div className="fixed bottom-6 right-6 z-20 flex flex-col gap-3 p-3 backdrop-blur-sm bg-white/20 rounded-full border border-white/30 shadow-lg">
+      <div className="fixed bottom-6 right-6 z-20 hidden md:flex flex-col gap-3 p-3 backdrop-blur-sm bg-white/20 rounded-full border border-white/30 shadow-lg">
         {themes.map((theme, index) => (
           <button
             key={index}
