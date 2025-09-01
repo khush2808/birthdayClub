@@ -22,9 +22,9 @@ export default function Home() {
       elements: ["bg-blue-300", "bg-cyan-300", "bg-teal-300"],
       preview: "from-blue-400 to-teal-500",
       button: {
-        bg: "bg-rose-500",
-        hover: "hover:bg-rose-600",
-        ring: "focus:ring-rose-400",
+        bg: "bg-cyan-500",
+        hover: "hover:bg-cyan-600",
+        ring: "focus:ring-cyan-400",
       },
     },
     {
@@ -34,9 +34,9 @@ export default function Home() {
       elements: ["bg-blue-300", "bg-indigo-300", "bg-blue-200"],
       preview: "from-blue-400 to-indigo-500",
       button: {
-        bg: "bg-emerald-500",
-        hover: "hover:bg-emerald-600",
-        ring: "focus:ring-emerald-400",
+        bg: "bg-blue-500",
+        hover: "hover:bg-blue-600",
+        ring: "focus:ring-blue-400",
       },
     },
     {
@@ -46,9 +46,9 @@ export default function Home() {
       elements: ["bg-purple-300", "bg-pink-300", "bg-indigo-300"],
       preview: "from-purple-400 to-pink-500",
       button: {
-        bg: "bg-green-500",
-        hover: "hover:bg-green-600",
-        ring: "focus:ring-green-400",
+        bg: "bg-purple-500",
+        hover: "hover:bg-purple-600",
+        ring: "focus:ring-purple-400",
       },
     },
     {
@@ -58,9 +58,9 @@ export default function Home() {
       elements: ["bg-orange-300", "bg-rose-300", "bg-pink-300"],
       preview: "from-orange-400 to-pink-500",
       button: {
-        bg: "bg-teal-500",
-        hover: "hover:bg-teal-600",
-        ring: "focus:ring-teal-400",
+        bg: "bg-orange-500",
+        hover: "hover:bg-orange-600",
+        ring: "focus:ring-orange-400",
       },
     },
   ];
@@ -148,7 +148,7 @@ export default function Home() {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-500 focus:border-transparent placeholder-gray-500 text-gray-900 font-medium"
+              className={`w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-500 focus:border-transparent placeholder-gray-500 text-gray-900 font-medium`}
               placeholder="Enter your full name"
             />
           </div>
@@ -168,7 +168,7 @@ export default function Home() {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-500 focus:border-transparent placeholder-gray-500 text-gray-900 font-medium"
+              className={`w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-500 focus:border-transparent placeholder-gray-500 text-gray-900 font-medium`}
               placeholder="Enter your email address"
             />
           </div>
@@ -188,7 +188,7 @@ export default function Home() {
               required
               value={formData.dateOfBirth}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-500 focus:border-transparent text-gray-900 font-medium [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+              className={`w-full px-4 py-3 bg-white/60 backdrop-blur-sm border border-white/60 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-${currentThemeData.accent}-500 focus:border-transparent text-gray-900 font-medium [&::-webkit-calendar-picker-indicator]:opacity-80 [&::-webkit-calendar-picker-indicator]:cursor-pointer`}
             />
           </div>
 
@@ -232,7 +232,7 @@ export default function Home() {
       </div>
 
       {/* Color Theme Picker */}
-      <div className="fixed bottom-6 right-6 z-20 flex flex-col gap-3 p-3 backdrop-blur-sm bg-white/20 rounded-full border border-white/30 shadow-lg">
+      <div className="fixed bottom-6 right-6 z-20 hidden md:flex flex-col gap-3 p-3 backdrop-blur-sm bg-white/20 rounded-full border border-white/30 shadow-lg">
         {themes.map((theme, index) => (
           <button
             key={index}
