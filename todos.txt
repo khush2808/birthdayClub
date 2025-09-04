@@ -3,4 +3,6 @@
 
 2 . logging and monitoring , explore and implement.
 
-3.make a post about it.
+3. add automated test files and fit them into ci/cd
+
+4.make a post about it.
