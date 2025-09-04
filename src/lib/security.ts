@@ -48,7 +48,7 @@ export function validateHoneypot(body: Record<string, unknown>): boolean {
 
 // Request logging for security monitoring
 export function logSecurityEvent(
-  type: "registration" | "email_trigger" | "auth_failure",
+  type: "registration" | "email_trigger" | "auth_failure" | "otp_verification" | "user_cleanup",
   ip: string,
   details?: Record<string, unknown>,
 ) {

@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
 declare global {
-  var mongoose: {
-    conn: any;
-    promise: Promise<any> | null;
+  var mongooseMainConnection: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
   };
 }
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error(
@@ -15,12 +15,16 @@ if (!MONGODB_URI) {
   );
 }
 
-if (!global.mongoose) {
-  global.mongoose = { conn: null, promise: null };
+if (!global.mongooseMainConnection) {
+  global.mongooseMainConnection = {
+    conn: null,
+    promise: null,
+  };
 }
 
-const cached = global.mongoose;
+const cached = global.mongooseMainConnection;
 
+// Main database connection (birthdayclub)
 async function dbConnect() {
   if (cached.conn) {
     return cached.conn;
@@ -33,9 +37,9 @@ async function dbConnect() {
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
-    });
+    // Use birthdayclub database
+    const mainDbUri = `${MONGODB_URI}/birthdayclub`;
+    cached.promise = mongoose.connect(mainDbUri, opts);
   }
 
   try {

@@ -1,16 +1,18 @@
 import mongoose, { type Document, Schema } from "mongoose";
 
-export interface IUser extends Document {
+export interface IDeletedUser extends Document {
   name: string;
   email: string;
   dateOfBirth: Date;
   authenticated: boolean;
   otp?: string;
   otpExpiresAt?: Date;
-  createdAt: Date;
+  originalCreatedAt: Date;
+  deletedAt: Date;
+  deletionReason: string;
 }
 
-const UserSchema = new Schema<IUser>({
+const DeletedUserSchema = new Schema<IDeletedUser>({
   name: {
     type: String,
     required: [true, "Name is required"],
@@ -19,7 +21,6 @@ const UserSchema = new Schema<IUser>({
   email: {
     type: String,
     required: [true, "Email is required"],
-    unique: true,
     lowercase: true,
     trim: true,
   },
@@ -29,7 +30,6 @@ const UserSchema = new Schema<IUser>({
   },
   authenticated: {
     type: Boolean,
-    default: false,
     required: true,
   },
   otp: {
@@ -40,11 +40,21 @@ const UserSchema = new Schema<IUser>({
     type: Date,
     required: false,
   },
-  createdAt: {
+  originalCreatedAt: {
+    type: Date,
+    required: true,
+  },
+  deletedAt: {
     type: Date,
     default: Date.now,
+    required: true,
+  },
+  deletionReason: {
+    type: String,
+    required: true,
+    default: "unauthenticated_cleanup",
   },
 });
 
-export default mongoose.models.User ||
-  mongoose.model<IUser>("User", UserSchema);
+export default mongoose.models.DeletedUser ||
+  mongoose.model<IDeletedUser>("DeletedUser", DeletedUserSchema);
