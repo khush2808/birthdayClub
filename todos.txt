@@ -6,3 +6,10 @@
 3. add automated test files and fit them into ci/cd
 
 4.make a post about it.
+
+5. send authentication link.
+
+6.groups show members. groups send link.
+groups invite. groups admin ,groups public/private. maybe chat.
+oh no I might be starting to make this a social media app.
+
