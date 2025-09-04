@@ -1,12 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 import dbConnect, { dbConnectDeleted } from "@/lib/mongodb";
-import User from "@/models/User";
-import DeletedUser from "@/models/DeletedUser";
 import {
-  validateApiKey,
   addSecurityHeaders,
   logSecurityEvent,
+  validateApiKey,
 } from "@/lib/security";
+import DeletedUser from "@/models/DeletedUser";
+import User from "@/models/User";
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -31,8 +31,15 @@ export async function POST(request: NextRequest) {
     await dbConnect(); // Main database
     const deletedDbConnection = await dbConnectDeleted(); // Deleted users database
 
+    if (!deletedDbConnection) {
+      throw new Error("Failed to connect to deleted users database");
+    }
+
     // Get the DeletedUser model for the deleted database
-    const DeletedUserInDeletedDb = deletedDbConnection.model<any>("DeletedUser", DeletedUser.schema);
+    const DeletedUserInDeletedDb = deletedDbConnection.model(
+      "DeletedUser",
+      DeletedUser.schema,
+    );
 
     // Find all unauthenticated users
     const unauthenticatedUsers = await User.find({ authenticated: false });

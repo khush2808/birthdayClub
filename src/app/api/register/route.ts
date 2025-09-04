@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
       const response = NextResponse.json(
         {
           error: "Invalid input data",
-          details: error.issues.map((err: any) => ({
+          details: error.issues.map((err) => ({
             field: err.path.join("."),
             message: err.message,
           })),

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 declare global {
   var mongooseConnections: {
     main: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
-    deleted: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
+    deleted: { conn: mongoose.Connection | null; promise: Promise<mongoose.Connection> | null };
   };
 }
 
@@ -67,8 +67,8 @@ async function dbConnectDeleted() {
 
     // Use deleted database
     const deletedDbUri = `${MONGODB_URI}/deleted`;
-    // Create a separate mongoose instance for the deleted database
-    cached.deleted.promise = mongoose.createConnection(deletedDbUri, opts);
+    // Create a separate mongoose connection for the deleted database
+    cached.deleted.promise = Promise.resolve(mongoose.createConnection(deletedDbUri, opts));
   }
 
   try {
