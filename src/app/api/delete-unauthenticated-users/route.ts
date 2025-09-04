@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import dbConnect, { dbConnectDeleted } from "@/lib/mongodb";
+import dbConnect from "@/lib/mongodb";
+import dbConnectDeleted from "@/lib/mongodb-deleted";
 import {
   addSecurityHeaders,
   logSecurityEvent,
@@ -59,7 +60,7 @@ export async function POST(request: NextRequest) {
       return addSecurityHeaders(response);
     }
 
-    const usersToDelete = unauthenticatedUsers.map(user => ({
+    const usersToDelete = unauthenticatedUsers.map((user) => ({
       name: user.name,
       email: user.email,
       dateOfBirth: user.dateOfBirth,
@@ -75,7 +76,8 @@ export async function POST(request: NextRequest) {
 
     try {
       // Step 1: Move users to deleted database
-      const insertResult = await DeletedUserInDeletedDb.insertMany(usersToDelete);
+      const insertResult =
+        await DeletedUserInDeletedDb.insertMany(usersToDelete);
       movedCount = insertResult.length;
 
       logSecurityEvent("user_cleanup", ip, {
@@ -86,7 +88,9 @@ export async function POST(request: NextRequest) {
 
       // Step 2: Only delete if all users were successfully moved
       if (movedCount !== unauthenticatedUsers.length) {
-        throw new Error(`Failed to move all users to deleted database. Expected: ${unauthenticatedUsers.length}, Moved: ${movedCount}`);
+        throw new Error(
+          `Failed to move all users to deleted database. Expected: ${unauthenticatedUsers.length}, Moved: ${movedCount}`,
+        );
       }
 
       // Step 3: Delete users from main database
@@ -103,8 +107,9 @@ export async function POST(request: NextRequest) {
 
         // This is a critical error - some users were moved but not deleted
         const response = NextResponse.json(
-          { 
-            error: "Partial deletion occurred. Some users were moved to deleted database but not removed from main database.",
+          {
+            error:
+              "Partial deletion occurred. Some users were moved to deleted database but not removed from main database.",
             movedCount,
             deletedCount,
           },
@@ -130,19 +135,25 @@ export async function POST(request: NextRequest) {
       });
 
       return addSecurityHeaders(response);
-
     } catch (moveOrDeleteError) {
       logSecurityEvent("user_cleanup", ip, {
         error: "move_or_delete_failed",
-        errorMessage: moveOrDeleteError instanceof Error ? moveOrDeleteError.message : "Unknown error",
+        errorMessage:
+          moveOrDeleteError instanceof Error
+            ? moveOrDeleteError.message
+            : "Unknown error",
         movedCount,
         deletedCount,
       });
 
       const response = NextResponse.json(
-        { 
-          error: "Failed to safely delete unauthenticated users. Operation aborted to prevent data loss.",
-          details: moveOrDeleteError instanceof Error ? moveOrDeleteError.message : "Unknown error",
+        {
+          error:
+            "Failed to safely delete unauthenticated users. Operation aborted to prevent data loss.",
+          details:
+            moveOrDeleteError instanceof Error
+              ? moveOrDeleteError.message
+              : "Unknown error",
           movedCount,
           deletedCount,
         },
@@ -151,7 +162,6 @@ export async function POST(request: NextRequest) {
 
       return addSecurityHeaders(response);
     }
-
   } catch (error) {
     console.error("Delete unauthenticated users error:", error);
 
@@ -213,16 +223,21 @@ export async function GET(request: NextRequest) {
     await dbConnect();
 
     // Count unauthenticated users
-    const unauthenticatedCount = await User.countDocuments({ authenticated: false });
-    const authenticatedCount = await User.countDocuments({ authenticated: true });
+    const unauthenticatedCount = await User.countDocuments({
+      authenticated: false,
+    });
+    const authenticatedCount = await User.countDocuments({
+      authenticated: true,
+    });
 
     const response = NextResponse.json({
       unauthenticatedUsers: unauthenticatedCount,
       authenticatedUsers: authenticatedCount,
       totalUsers: unauthenticatedCount + authenticatedCount,
-      message: unauthenticatedCount > 0 
-        ? `${unauthenticatedCount} unauthenticated users ready for cleanup`
-        : "No unauthenticated users found",
+      message:
+        unauthenticatedCount > 0
+          ? `${unauthenticatedCount} unauthenticated users ready for cleanup`
+          : "No unauthenticated users found",
     });
 
     return addSecurityHeaders(response);
