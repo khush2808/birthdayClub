@@ -220,7 +220,7 @@ return Response.json(
 - Batch processing for multiple recipients
 - Async email sending to prevent timeout
 - Connection reuse for multiple emails
-- Graceful handling of rate limits
+- Error handling for service failures
 
 ## 🔍 Monitoring & Debugging
 

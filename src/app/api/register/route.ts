@@ -3,7 +3,6 @@ import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
 import { registerSchema, sanitizeInput } from "@/lib/validation";
 import {
-  rateLimit,
   addSecurityHeaders,
   validateHoneypot,
   logSecurityEvent,
@@ -14,25 +13,6 @@ export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
 
   try {
-    // Apply rate limiting
-    const rateLimitResult = rateLimit(request, 5, 15 * 60 * 1000); // 5 requests per 15 minutes
-
-    if (!rateLimitResult.allowed) {
-      logSecurityEvent("rate_limit", ip, {
-        retryAfter: rateLimitResult.retryAfter,
-      });
-
-      const response = NextResponse.json(
-        {
-          error: "Too many registration attempts. Please try again later.",
-          retryAfter: rateLimitResult.retryAfter,
-        },
-        { status: 429 },
-      );
-
-      return addSecurityHeaders(response);
-    }
-
     // Connect to database with retry logic
     await dbConnect();
 
