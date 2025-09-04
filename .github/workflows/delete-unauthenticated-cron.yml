@@ -11,15 +11,44 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Cleanup Unauthenticated Users
+      - name: Cleanup Expired OTPs
         run: |
-          echo "Triggering unauthenticated users cleanup..."
+          echo "Cleaning up expired OTPs first..."
           
           # Validate the URL secret is set
           if [ -z "${{ secrets.VERCEL_APP_URL }}" ]; then
             echo "::error::VERCEL_APP_URL secret is not set"
             exit 1
           fi
+          
+          OTP_CLEANUP_URL="${{ secrets.VERCEL_APP_URL }}/api/cleanup-expired-otps"
+          echo "OTP Cleanup URL: $OTP_CLEANUP_URL"
+          
+           # Clean up expired OTPs first
+           otp_response=$(curl -s -L -w "%{http_code}" -X POST \
+             "$OTP_CLEANUP_URL" \
+             -H "Content-Type: application/json" \
+             -H "x-api-key: ${{ secrets.API_KEY }}" \
+             -H "User-Agent: GitHub-Actions-Cleanup-Cron/1.0" \
+             --max-time 30 \
+             --connect-timeout 10)
+          
+          otp_http_code="${otp_response: -3}"
+          otp_body="${otp_response%???}"
+          
+          echo "OTP Cleanup HTTP Status: $otp_http_code"
+          echo "OTP Cleanup Response: $otp_body"
+          
+          # Continue even if OTP cleanup fails (it's not critical)
+          if [ "$otp_http_code" -ge 200 ] && [ "$otp_http_code" -lt 300 ]; then
+            echo "::notice::Expired OTPs cleanup completed successfully (HTTP $otp_http_code)"
+          else
+            echo "::warning::OTP cleanup failed with status $otp_http_code, continuing with user cleanup"
+          fi
+
+      - name: Cleanup Unauthenticated Users
+        run: |
+          echo "Triggering unauthenticated users cleanup..."
           
           TARGET_URL="${{ secrets.VERCEL_APP_URL }}/api/delete-unauthenticated-users"
           echo "Target URL: $TARGET_URL"
@@ -70,4 +99,7 @@ jobs:
 
       - name: Log completion
         run: |
-          echo "Unauthenticated users cleanup cron job completed at $(date)"
+          echo "Complete cleanup cron job finished at $(date)"
+          echo "Operations performed:"
+          echo "1. Expired OTPs cleanup"
+          echo "2. Unauthenticated users cleanup"
