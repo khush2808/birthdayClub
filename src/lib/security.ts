@@ -1,47 +1,6 @@
 import type { NextRequest, NextResponse } from "next/server";
 
-// In-memory rate limiting store (for serverless, consider Redis for production)
-const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
-// Rate limiting middleware
-export function rateLimit(
-  request: NextRequest,
-  maxRequests = 5,
-  windowMs = 15 * 60 * 1000,
-) {
-  const ip = request.headers.get("x-forwarded-for") || "unknown";
-  const now = Date.now();
-
-  // Clean up old entries
-  for (const [key, value] of rateLimitStore.entries()) {
-    if (now > value.resetTime) {
-      rateLimitStore.delete(key);
-    }
-  }
-
-  const current = rateLimitStore.get(ip);
-
-  if (!current) {
-    rateLimitStore.set(ip, { count: 1, resetTime: now + windowMs });
-    return { allowed: true, remaining: maxRequests - 1 };
-  }
-
-  if (now > current.resetTime) {
-    rateLimitStore.set(ip, { count: 1, resetTime: now + windowMs });
-    return { allowed: true, remaining: maxRequests - 1 };
-  }
-
-  if (current.count >= maxRequests) {
-    return {
-      allowed: false,
-      remaining: 0,
-      retryAfter: Math.ceil((current.resetTime - now) / 1000),
-    };
-  }
-
-  current.count++;
-  return { allowed: true, remaining: maxRequests - current.count };
-}
 
 // API key authentication middleware
 export function validateApiKey(request: NextRequest): boolean {
@@ -89,7 +48,7 @@ export function validateHoneypot(body: Record<string, unknown>): boolean {
 
 // Request logging for security monitoring
 export function logSecurityEvent(
-  type: "registration" | "email_trigger" | "rate_limit" | "auth_failure",
+  type: "registration" | "email_trigger" | "auth_failure",
   ip: string,
   details?: Record<string, unknown>,
 ) {

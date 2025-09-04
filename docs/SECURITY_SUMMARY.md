@@ -8,7 +8,7 @@
 |---------------|--------|-------|
 | **Data Exposure** | ❌ GET endpoint exposed user emails/names | ✅ API key required, only aggregated data |
 | **Input Validation** | ❌ Basic null checks only | ✅ Comprehensive Zod + validator.js validation |
-| **Rate Limiting** | ❌ No protection against spam | ✅ 5 requests per 15 minutes per IP |
+| **Rate Limiting** | ❌ No protection against spam | ❌ Removed (redundant with API key protection) |
 | **Authentication** | ❌ Anyone could trigger emails | ✅ API key required for sensitive operations |
 | **Bot Protection** | ❌ No spam detection | ✅ Honeypot fields + bot detection |
 | **XSS Protection** | ❌ No input sanitization | ✅ Full HTML escaping and validation |
@@ -20,11 +20,6 @@
 ```
 ┌─────────────────────────────────────────┐
 │             User Request                │
-└─────────────────┬───────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────┐
-│        Rate Limiting (5/15min)         │ ← Prevents spam
 └─────────────────┬───────────────────────┘
                   │
                   ▼
@@ -72,9 +67,9 @@
 - ✅ **Sanitization**: HTML escaping, trim whitespace
 
 ### 3. **Anti-Abuse Protection**
-- ✅ **Rate Limiting**: 5 registrations per 15 minutes per IP
 - ✅ **Bot Detection**: Honeypot fields for automated spam
 - ✅ **Request Logging**: Security event monitoring
+- ✅ **API Key Protection**: Sensitive operations require authentication
 
 ### 4. **API Security**
 - ✅ **Authentication**: X-API-Key header for sensitive endpoints
@@ -86,7 +81,6 @@
 ✅ **Email Validation**: Correctly validates email format  
 ✅ **XSS Protection**: `<script>alert('xss')</script>` → `&lt;script&gt;alert(&#x27;xss&#x27;)&lt;&#x2F;script&gt;`  
 ✅ **Bot Detection**: Honeypot fields correctly identify automated requests  
-✅ **Rate Limiting**: Memory-based IP tracking with cleanup  
 ✅ **API Authentication**: Bearer token and X-API-Key support  
 
 ## 🔧 Configuration Required
@@ -122,7 +116,7 @@ curl -X GET /api/send-birthday-emails \
 
 1. ✅ **Confidentiality**: User data no longer exposed publicly
 2. ✅ **Integrity**: Input validation prevents malformed data
-3. ✅ **Availability**: Rate limiting prevents DoS attacks
+3. ✅ **Availability**: API key protection prevents abuse
 4. ✅ **Authentication**: API key controls access to sensitive operations
 5. ✅ **Non-repudiation**: Security logging tracks all events
 6. ✅ **Privacy**: Minimal data exposure, proper sanitization

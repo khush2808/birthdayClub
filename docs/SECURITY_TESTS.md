@@ -48,11 +48,7 @@ curl -X POST http://localhost:3000/api/register \
   }'
 ```
 
-## 2. Testing Rate Limiting
-
-Run the valid registration request 6 times in quick succession. The 6th request should be rate limited.
-
-## 3. Testing API Authentication
+## 2. Testing API Authentication
 
 ### Without API Key
 ```bash
@@ -71,7 +67,7 @@ curl -X GET http://localhost:3000/api/send-birthday-emails \
   -H "x-api-key: your-api-key-here"
 ```
 
-## 4. Testing Bot Detection
+## 3. Testing Bot Detection
 
 ### Honeypot Field Test
 ```bash
@@ -91,10 +87,9 @@ curl -X POST http://localhost:3000/api/register \
 2. **Invalid Email**: Should return 400 with validation error
 3. **XSS Attempt**: Should return sanitized data or validation error
 4. **Invalid Date**: Should return 400 with date validation error
-5. **Rate Limiting**: 6th request should return 429
-6. **No API Key**: Should return 401 Unauthorized
-7. **With API Key**: Should work normally (if API_KEY is set)
-8. **Honeypot Test**: Should return 200 but not actually register user
+5. **No API Key**: Should return 401 Unauthorized
+6. **With API Key**: Should work normally (if API_KEY is set)
+7. **Honeypot Test**: Should return 200 but not actually register user
 
 ## Security Headers Verification
 
