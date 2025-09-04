@@ -1,0 +1,6 @@
+1. groups 
+- and migrations for that.
+
+2 . logging and monitoring , explore and implement.
+
+3.make a post about it.
