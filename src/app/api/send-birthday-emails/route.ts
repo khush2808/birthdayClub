@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
           { $eq: [{ $dayOfMonth: "$dateOfBirth" }, todayDate] },
         ],
       },
+      authenticated: true, // Only find authenticated users
     });
 
     if (birthdayUsers.length === 0) {
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
       return addSecurityHeaders(response);
     }
 
-    const allUsers = await User.find({}, "name email");
+    const allUsers = await User.find({ authenticated: true }, "name email");
 
     if (allUsers.length < 2) {
       logSecurityEvent("email_trigger", ip, {
@@ -184,6 +185,7 @@ export async function GET(request: NextRequest) {
           { $eq: [{ $dayOfMonth: "$dateOfBirth" }, todayDate] },
         ],
       },
+      authenticated: true, // Only find authenticated users
     });
 
     // Return only aggregated data - no personal information

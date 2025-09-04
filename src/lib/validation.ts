@@ -54,6 +54,22 @@ export const apiKeySchema = z.object({
   apiKey: z.string().min(1, "API key is required"),
 });
 
+// OTP verification schema
+export const otpVerificationSchema = z.object({
+  email: z
+    .string()
+    .email("Invalid email format")
+    .trim()
+    .toLowerCase()
+    .refine((val) => validator.isEmail(val), {
+      message: "Invalid email format",
+    }),
+  otp: z
+    .string()
+    .length(6, "OTP must be exactly 6 digits")
+    .regex(/^\d{6}$/, "OTP must contain only numbers"),
+});
+
 // Sanitization utility functions
 export const sanitizeInput = {
   name: (input: string): string => {
@@ -66,5 +82,21 @@ export const sanitizeInput = {
 
   general: (input: string): string => {
     return validator.escape(validator.trim(input));
+  },
+};
+
+// OTP utility functions
+export const otpUtils = {
+  generate: (): string => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  },
+
+  getExpirationTime: (): Date => {
+    const now = new Date();
+    return new Date(now.getTime() + 10 * 60 * 1000); // 10 minutes from now
+  },
+
+  isExpired: (expirationTime: Date): boolean => {
+    return new Date() > expirationTime;
   },
 };

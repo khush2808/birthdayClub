@@ -8,6 +8,66 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+export async function sendWelcomeEmailWithOTP(
+  user: { name: string; email: string },
+  otp: string,
+) {
+  const mailOptions = {
+    from: process.env.GMAIL_EMAIL,
+    to: user.email,
+    subject: "🎂 Welcome to Birthday Club - Verify Your Email",
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
+        <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #4f46e5; margin-bottom: 10px;">🎂 Welcome to Birthday Club! 🎂</h1>
+            <div style="width: 50px; height: 3px; background-color: #4f46e5; margin: 0 auto;"></div>
+          </div>
+          
+          <div style="margin-bottom: 30px;">
+            <h2 style="color: #333; margin-bottom: 15px;">Hi ${user.name}! 👋</h2>
+            <p style="color: #666; font-size: 16px; line-height: 1.6;">
+              Welcome to Birthday Club! We're excited to have you join our community where every birthday is celebrated. 🎉
+            </p>
+            <p style="color: #666; font-size: 16px; line-height: 1.6;">
+              To complete your registration and start receiving birthday notifications, please verify your email address using the OTP below:
+            </p>
+          </div>
+          
+          <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <p style="margin: 0 0 10px 0; color: #374151; font-weight: bold;">Your Verification Code:</p>
+            <div style="font-size: 32px; font-weight: bold; color: #4f46e5; letter-spacing: 4px; font-family: monospace;">
+              ${otp}
+            </div>
+            <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 14px;">
+              This code expires in 10 minutes
+            </p>
+          </div>
+          
+          <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="margin: 0; color: #92400e; font-size: 14px;">
+              <strong>🔒 Security Note:</strong> Never share this OTP with anyone. Birthday Club will never ask for your verification code via phone or email.
+            </p>
+          </div>
+          
+          <div style="text-align: center; color: #9ca3af; font-size: 14px; border-top: 1px solid #e5e7eb; padding-top: 20px;">
+            <p>This email was sent by Birthday Club 🎂</p>
+            <p>If you didn't sign up for Birthday Club, please ignore this email.</p>
+          </div>
+        </div>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Welcome email with OTP sent to ${user.email}`);
+  } catch (error) {
+    console.error(`Failed to send welcome email to ${user.email}:`, error);
+    throw error;
+  }
+}
+
 export async function sendBirthdayEmails(
   birthdayPerson: { name: string; email: string },
   allUsers: Array<{ name: string; email: string }>,

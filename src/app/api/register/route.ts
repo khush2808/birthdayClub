@@ -1,7 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
-import { registerSchema, sanitizeInput } from "@/lib/validation";
+import { registerSchema, sanitizeInput, otpUtils } from "@/lib/validation";
+import { sendWelcomeEmailWithOTP } from "@/lib/email";
 import {
   addSecurityHeaders,
   validateHoneypot,
@@ -60,19 +61,64 @@ export async function POST(request: NextRequest) {
       return addSecurityHeaders(response);
     }
 
-    // Create new user
-    const user = new User(sanitizedData);
+    // Generate OTP for email verification
+    const otp = otpUtils.generate();
+    const otpExpiresAt = otpUtils.getExpirationTime();
+
+    // Create new user (unauthenticated by default)
+    const user = new User({
+      ...sanitizedData,
+      authenticated: false,
+      otp,
+      otpExpiresAt,
+    });
     await user.save();
 
-    logSecurityEvent("registration", ip, { success: true, userId: user._id });
+    // Send welcome email with OTP
+    try {
+      await sendWelcomeEmailWithOTP(
+        { name: sanitizedData.name, email: sanitizedData.email },
+        otp,
+      );
+    } catch (emailError) {
+      // If email fails, we should still log the user creation but indicate email failure
+      logSecurityEvent("registration", ip, {
+        success: true,
+        userId: user._id,
+        emailSent: false,
+        emailError: emailError instanceof Error ? emailError.message : "Unknown email error",
+      });
+
+      const response = NextResponse.json(
+        {
+          message: "User registered successfully, but verification email could not be sent. Please try again later.",
+          user: {
+            id: user._id,
+            name: sanitizedData.name,
+            email: sanitizedData.email,
+            authenticated: false,
+          },
+        },
+        { status: 201 },
+      );
+
+      return addSecurityHeaders(response);
+    }
+
+    logSecurityEvent("registration", ip, { 
+      success: true, 
+      userId: user._id,
+      emailSent: true,
+    });
 
     const response = NextResponse.json(
       {
-        message: "User registered successfully",
+        message: "User registered successfully. Please check your email for the verification code.",
         user: {
           id: user._id,
           name: sanitizedData.name,
           email: sanitizedData.email,
+          authenticated: false,
         },
       },
       { status: 201 },

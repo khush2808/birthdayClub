@@ -1,0 +1,73 @@
+name: Daily Unauthenticated Users Cleanup
+
+on:
+  schedule:
+    # Runs at 2:30 AM UTC = 8:00 AM IST daily (30 minutes before birthday emails)
+    - cron: '30 2 * * *'
+  workflow_dispatch: # Allows manual triggering for testing
+
+jobs:
+  cleanup-unauthenticated-users:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Cleanup Unauthenticated Users
+        run: |
+          echo "Triggering unauthenticated users cleanup..."
+          
+          # Validate the URL secret is set
+          if [ -z "${{ secrets.VERCEL_APP_URL }}" ]; then
+            echo "::error::VERCEL_APP_URL secret is not set"
+            exit 1
+          fi
+          
+          TARGET_URL="${{ secrets.VERCEL_APP_URL }}/api/delete-unauthenticated-users"
+          echo "Target URL: $TARGET_URL"
+          
+           # Make the request with detailed curl options
+           response=$(curl -s -L -w "%{http_code}" -X POST \
+             "$TARGET_URL" \
+             -H "Content-Type: application/json" \
+             -H "x-api-key: ${{ secrets.API_KEY }}" \
+             -H "User-Agent: GitHub-Actions-Cleanup-Cron/1.0" \
+             --max-time 30 \
+             --connect-timeout 10)
+          
+          http_code="${response: -3}"
+          body="${response%???}"
+          
+          echo "HTTP Status: $http_code"
+          echo "Response Body: $body"
+          
+          # Check for successful responses (200-299)
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+            echo "::notice::Unauthenticated users cleanup completed successfully (HTTP $http_code)"
+          else
+            echo "::error::Cleanup trigger failed with status $http_code"
+            echo "::error::Response body: $body"
+            
+            # Provide specific error context for common issues
+            case "$http_code" in
+              308|301|302|307)
+                echo "::error::Redirect detected. Check if VERCEL_APP_URL has correct protocol (https://) and no trailing slash"
+                ;;
+              401)
+                echo "::error::Unauthorized. Check if API_KEY secret is set correctly"
+                ;;
+              404)
+                echo "::error::API endpoint not found. Verify the deployment and API route exists"
+                ;;
+              500|502|503|504)
+                echo "::error::Server error. Check Vercel deployment logs and database connectivity"
+                ;;
+              000)
+                echo "::error::Network error. Could not connect to the server"
+                ;;
+            esac
+            
+            exit 1
+          fi
+
+      - name: Log completion
+        run: |
+          echo "Unauthenticated users cleanup cron job completed at $(date)"
