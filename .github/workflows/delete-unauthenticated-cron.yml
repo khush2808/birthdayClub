@@ -2,8 +2,8 @@ name: Daily Unauthenticated Users Cleanup
 
 on:
   schedule:
-    # Runs at 2:30 AM UTC = 8:00 AM IST daily (30 minutes before birthday emails)
-    - cron: '30 2 * * *'
+    # Runs at 3:00 AM UTC = 8:30 AM IST daily (30 minutes before birthday emails)
+    - cron: '0 3 * * *'
   workflow_dispatch: # Allows manual triggering for testing
 
 jobs:
