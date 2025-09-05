@@ -12,4 +12,5 @@
 6.groups show members. groups send link.
 groups invite. groups admin ,groups public/private. maybe chat.
 oh no I might be starting to make this a social media app.
+idk.
 
