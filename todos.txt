@@ -13,4 +13,4 @@
 groups invite. groups admin ,groups public/private. maybe chat.
 oh no I might be starting to make this a social media app.
 idk.
-
+7. workers->kafka workers ig. idk. something distributed asynchronous event based.
